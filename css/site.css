@@ -213,14 +213,14 @@ main { position: relative; display: block; }
 .mbt-h { margin: 0; font-family: var(--f-display); font-weight: 100; line-height: 1.12; letter-spacing: -.01em; color: var(--ink); font-size: calc(clamp(36px, 10.6cqi, 62px) * var(--a11y-scale)); }
 .mbt-line { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; }
 .mbt-w { display: block; margin-inline: .14em; white-space: nowrap; }
-.mbt-slot { display: block; flex: none; position: relative; width: 1.8em; height: .8em; margin-inline: .1em; }
+.mbt-slot { display: block; flex: none; position: relative; width: 2.3em; height: .9em; margin-inline: .12em; }
 .mbt-pill { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 999px; background: var(--line); }
 .mbt-pill img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
 .mbt-cap { margin: clamp(28px, 3vw, 48px) auto 0; max-width: 52ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
 @media (min-width: 768px) {
   .mbt-h { font-size: calc(clamp(44px, 7cqi, 115px) * var(--a11y-scale)); }
   .mbt-line { flex-wrap: nowrap; }
-  .mbt-slot { width: 2.2em; }
+  .mbt-slot { width: 2.6em; height: 1em; }
 }
 .mbt-flip .mbt-slot:not(.is-open) { width: 0; margin-inline: 0; }
 @media (hover: hover) and (pointer: fine) { .mbt:hover .mbt-pill img { transform: scale(1.08); } }
@@ -242,7 +242,7 @@ main { position: relative; display: block; }
 .sync-texts .block { min-height: 80vh; display: grid; align-content: center; justify-items: start; gap: 16px; }
 .num { font-size: var(--fs-micro); letter-spacing: .16em; color: var(--muted); }
 .block h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(32px, 2vw + .9rem, 64px) * var(--a11y-scale)); line-height: 1.04; }
-.block p { max-width: 34ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+.block p { max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
 .sync-media { position: sticky; top: 15vh; height: 70vh; background: var(--paper); }
 .si { position: absolute; inset: 0; margin: 0; display: grid; grid-template-rows: minmax(0, 1fr); place-items: center;   /* a sized row, so the photo's % height is read from the frame and not from its own width */
   overflow: hidden; background: var(--paper); }
