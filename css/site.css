@@ -1,0 +1,791 @@
+/* ABC Design Israel · home page (design-dna, 15.10.2026)
+   Concept: a balloon. Everything is light, floating and quiet; the string of the mark is the thread that ties the sections.
+   Frame: fluid (MV:fluid). Language: sister to Baby Boss (MV:s05), in ABC's own colours: black, white, the German site's
+   light green paper and its forest green. Round controls, because the brand is a balloon; square media.
+   Type: Leon (pair L3): headings Leon 100, body Leon 400. Factor 1.101 is inside the sizes, lambda .84 inside the line heights.
+   Header MV:hd8 (a capsule that opens into the menu). Hero MV:h3 (full media). Footer MV:ft8 (the brand signature).
+   Moves: the balloon string (MV:g25 + a drawn stroke), MV:g152 on the statement, MV:g05 on the Flash, MV:g12 on the family. */
+
+/* ---------- fonts (Fontup licence: never in a public repo, never sent to the client as files) ---------- */
+@font-face { font-family: "Leon"; src: url("../fonts/Leon-Thin.woff2") format("woff2"); font-weight: 100; font-display: swap; }
+@font-face { font-family: "Leon"; src: url("../fonts/Leon-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+/* ---------- tokens ---------- */
+:root {
+  --a11y-scale: 1;
+  --f-display: "Leon", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --f-text: "Leon", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+  /* measured from abc-design.de: text #222, the light green surface, the forest green. No accent: the photo brings the colour */
+  --ink: #222222;
+  --text: #2b2d2b;
+  --muted: #5d625e;          /* 6.1:1 on white, 5.5:1 on the paper */
+  --surface: #ffffff;
+  --paper: #f0f3f0;
+  --forest: #384a3c;
+  --sun: #fedc70;             /* the German site's offer tag: the one yellow, for the gift */
+  --line: #dfe4df;
+  --on-dark: #ffffff;
+  --on-dark-muted: rgba(255,255,255,.78);
+  --focus: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink);
+
+  --r-control: 999px;        /* the balloon: every control is round */
+  --r-media: 0px;
+  --ease: cubic-bezier(.2,.6,.2,1);
+  --ease-io: cubic-bezier(.76,0,.24,1);
+
+  --gutter: clamp(24px, 5vw, 96px);
+  --sec: clamp(64px, 7vw, 160px);
+  --sec-breath: clamp(112px, 18vw, 320px);
+  --gap-s: clamp(14px, 1vw, 24px);
+  --gap-m: clamp(20px, 2vw, 48px);
+  --measure: clamp(560px, 36vw, 880px);
+
+  /* type x1.101 (Leon reads a little small). The hero size depends on width AND height: it has to fit a 1280x720 laptop */
+  --fs-hero: calc(clamp(52px, min(5.2vw, 7.5vh) + .55rem, 150px) * var(--a11y-scale));
+  --fs-h2: calc(clamp(42px, 3.52vw + .55rem, 101px) * var(--a11y-scale));
+  --fs-h3: calc(clamp(21px, .66vw + .88rem, 29px) * var(--a11y-scale));
+  --fs-lead: calc(clamp(19px, .39vw + .94rem, 24px) * var(--a11y-scale));
+  --fs-body: calc(clamp(15px, .2vw + .85rem, 18px) * var(--a11y-scale));
+  --fs-small: calc(clamp(15px, .22vw + .83rem, 18px) * var(--a11y-scale));
+  --fs-micro: calc(clamp(14px, .17vw + .77rem, 16.5px) * var(--a11y-scale));
+
+  --hdr: 92px;               /* the capsule: 16px above it, 60px tall, 16px of air */
+}
+@media (max-width: 767px) {
+  :root {
+    --fs-hero: calc(clamp(40px, 11.4vw, 56px) * var(--a11y-scale));
+    --fs-h2: calc(clamp(34px, 9.4vw, 42px) * var(--a11y-scale));
+    --hdr: 84px;
+  }
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; background: var(--surface); }
+body { margin: 0; overflow-x: clip; background: var(--surface); color: var(--text); font-family: var(--f-text); font-size: var(--fs-body); font-weight: 400; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2 { margin: 0; font-family: var(--f-display); font-weight: 100; letter-spacing: -.01em; color: var(--ink); text-wrap: balance; }
+h1 { font-size: var(--fs-hero); line-height: .98; }
+h2 { font-size: var(--fs-h2); line-height: 1.02; }
+h3 { margin: 0; font-family: var(--f-text); font-size: var(--fs-h3); font-weight: 400; line-height: 1.3; color: var(--ink); }
+p { margin: 0; text-wrap: pretty; }
+p .lat, li .lat { white-space: nowrap; }      /* "ABC Design" never splits across lines inside a sentence */
+:focus-visible { outline: none; box-shadow: var(--focus); }
+main:focus { outline: none; }
+.skip { position: fixed; top: 12px; inset-inline-start: 12px; z-index: 200; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: var(--r-control); background: var(--ink); color: var(--on-dark); text-decoration: none; transform: translateY(-160%); transition: transform .2s var(--ease); }
+.skip:focus-visible { transform: none; }
+.ic { display: inline-block; flex: none; width: 24px; height: 24px; fill: currentColor; vertical-align: middle; }
+.tel { unicode-bidi: isolate; white-space: nowrap; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 32px; border: 1px solid transparent; border-radius: var(--r-control); font-family: var(--f-text); font-size: calc(16.5px * var(--a11y-scale)); font-weight: 400; line-height: 1.2; text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease), transform .12s var(--ease); }
+.btn:active { transform: scale(.98); }
+.btn-sm { min-height: 44px; padding: 0 20px; font-size: var(--fs-small); }
+.btn-solid { background: var(--ink); color: var(--on-dark); }
+.btn-ghost { background: transparent; border-color: currentColor; color: var(--ink); }
+.btn-light { background: var(--surface); color: var(--forest); }
+.btn-ghost-light { background: transparent; border-color: rgba(255,255,255,.72); color: var(--on-dark); }
+.btn .ic { width: 20px; height: 20px; }
+.ic-arr { transition: transform .2s var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .btn-solid:hover { background: #3b3d3b; }
+  .btn-ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
+  .btn-light:hover { background: var(--paper); }
+  .btn-ghost-light:hover { background: var(--on-dark); border-color: var(--on-dark); color: var(--forest); }
+  .btn:hover .ic-arr { transform: translateX(-4px); }
+}
+.tlink { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--fs-small); color: var(--ink); text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-size: 100% 1px; background-position: 100% calc(100% - 9px);
+  transition: background-size .3s var(--ease); }
+@media (hover: hover) and (pointer: fine) { .tlink:hover { background-size: 0 1px; } }
+
+/* ---------- header: MV:hd8, a capsule that opens into the menu. Fixed on a real site, with headroom ---------- */
+.h8x { position: fixed; z-index: 50; top: 16px; inset-inline: 0; margin-inline: auto; width: min(680px, calc(100% - 32px)); color: var(--ink); transition: transform .45s var(--ease); }
+.h8x.is-hidden { transform: translateY(calc(-100% - 32px)); }
+.h8-card { position: relative; isolation: isolate; border-radius: 30px; overflow: hidden; transition: border-radius .4s var(--ease); }
+.h8-card::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: color-mix(in srgb, var(--surface) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4); border: 1px solid color-mix(in srgb, var(--ink) 9%, transparent);
+  box-shadow: 0 10px 32px color-mix(in srgb, var(--ink) 7%, transparent); transition: background-color .3s var(--ease), box-shadow .3s var(--ease); }
+.h8x.menu-open .h8-card { border-radius: 26px; }
+.h8x.menu-open .h8-card::before { background: color-mix(in srgb, var(--surface) 97%, transparent); box-shadow: 0 24px 64px color-mix(in srgb, var(--ink) 18%, transparent); }
+.h8-bar { display: flex; align-items: center; gap: 8px; min-height: 60px; padding: 8px; padding-inline-start: 24px; }
+.hlogo { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); }
+.hlogo svg { display: block; height: 19px; width: auto; aspect-ratio: 439 / 94.6; fill: currentColor; }
+.h8-toggle { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: var(--r-control);
+  background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); font-size: var(--fs-small); cursor: pointer; transition: background-color .15s var(--ease); }
+.h8-toggle i { position: relative; width: 12px; height: 12px; transition: transform .35s var(--ease); }
+.h8-toggle i::before, .h8-toggle i::after { content: ""; position: absolute; inset-inline: 0; top: 5px; height: 1.5px; border-radius: 2px; background: currentColor; }
+.h8-toggle i::after { transform: rotate(90deg); }
+.h8x.menu-open .h8-toggle i { transform: rotate(45deg); }
+@media (hover: hover) and (pointer: fine) { .h8-toggle:hover { background: color-mix(in srgb, var(--ink) 11%, transparent); } }
+.h8-a11y { display: none; width: 44px; height: 44px; border: 0; border-radius: var(--r-control); background: none; place-items: center; color: var(--ink); cursor: pointer; }
+.h8-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
+.h8x.menu-open .h8-panel { grid-template-rows: 1fr; }
+.h8-panel > div { overflow: hidden; visibility: hidden; transition: visibility 0s .45s; }   /* closed: hidden once it has folded */
+.h8x.menu-open .h8-panel > div { visibility: visible; transition-delay: 0s; }
+.h8-in { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 8px 24px 24px; }
+.h8-links a { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; font-family: var(--f-display); font-size: calc(clamp(30px, 2.8vw, 38px) * var(--a11y-scale)); font-weight: 100; line-height: 1.1; color: inherit; text-decoration: none; opacity: 0; transform: translateY(12px);
+  transition: opacity .15s var(--ease), transform .15s var(--ease), color .15s var(--ease); }
+.h8-links small { font-family: var(--f-text); font-size: var(--fs-micro); font-weight: 400; color: var(--muted); }
+.h8x.menu-open .h8-links a { opacity: 1; transform: none; transition-duration: .4s, .4s, .15s; transition-delay: calc(.12s + var(--i) * 45ms), calc(.12s + var(--i) * 45ms), 0s; }
+.h8-side { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 8px; font-size: var(--fs-small); line-height: 1.5; color: var(--muted); opacity: 0; transition: opacity .15s var(--ease); }
+.h8-side a { color: var(--ink); text-decoration: none; }
+.h8-side a:not(.btn) { position: relative; padding-block: 4px; margin-block: -4px; }
+.h8-side a:not(.btn)::after { content: ""; position: absolute; inset: -8px 0; }
+.h8-side .btn { display: none; color: var(--on-dark); }
+.h8x.menu-open .h8-side { opacity: 1; transition: opacity .4s var(--ease) .3s; }
+@media (hover: hover) and (pointer: fine) { .h8-links a:hover { color: var(--forest); } }
+@media (max-width: 700px) {
+  .h8-side .btn { display: inline-flex; }
+  .h8-bar .btn { display: none; }
+  .h8-bar { padding-inline-start: 20px; }
+  .h8-in { grid-template-columns: 1fr; padding: 8px 20px 20px; }
+}
+@media (max-width: 767px) { .h8-a11y { display: grid; } }
+@media (prefers-reduced-motion: reduce) { .h8x, .h8x * { transition-duration: .01ms !important; transition-delay: 0s !important; } }
+
+/* ---------- hero: MV:h3, full media. The Flash in Ink, cut out on the brand's light green, the words on the start side ---------- */
+.hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); align-items: center; column-gap: clamp(24px, 4vw, 96px);
+  padding: var(--hdr) var(--gutter) 0; background: var(--paper); overflow: hidden; }
+.hero-text { display: grid; justify-items: start; gap: clamp(16px, 2.6vh, 32px); padding-block: clamp(16px, 4vh, 64px); /* qa-allow: sec, the first screen is fitted to the viewport height (hero-fit), not to the section rhythm */ }
+.kick { display: flex; align-items: center; gap: 12px; font-size: var(--fs-micro); color: var(--muted); }
+.kick-mark { flex: none; width: 34px; height: 34px; fill: var(--ink); }
+.kick-line { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; }
+.hero h1 { max-width: 13ch; }
+.hl { display: block; overflow: hidden; padding-block: .1em .14em; margin-block: -.1em -.14em; }   /* room for the ascenders while the line rises */
+.hl > span { display: block; }
+.lead { max-width: 34ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero .cta { margin-top: clamp(4px, 1vh, 12px); }
+.hero-media { align-self: end; margin: 0; height: min(calc(100svh - var(--hdr) - 2vh), 1080px); display: flex; justify-content: center; align-items: flex-end; }
+.hero-media img { height: 100%; width: auto; max-width: 100%; object-fit: contain; object-position: 50% 100%; }
+
+/* opening: the words rise line by line, the stroller settles (engine/motion.md 2). open-anim is set in <head> only when
+   motion is allowed; a 2.5s CSS failsafe shows everything if the script never runs */
+.open-anim .hero .rv { opacity: 0; transform: translateY(18px); animation: fs 0s 2.5s forwards; }
+.open-anim .hero .hl > span { transform: translateY(110%); animation: fs 0s 2.5s forwards; }
+.open-anim .hero-media img { opacity: 0; transform: translateY(24px); animation: fs 0s 2.5s forwards; }
+.open-anim .hero.is-in .rv { opacity: 1; transform: none; animation: none; transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(320ms + var(--i, 0) * 90ms); }
+.open-anim .hero.is-in .hl > span { transform: none; animation: none; transition: transform .9s var(--ease-io); }
+.open-anim .hero.is-in .hl:nth-child(2) > span { transition-delay: .09s; }
+.open-anim .hero.is-in .hero-media img { opacity: 1; transform: none; animation: none; transition: opacity 1s var(--ease) .15s, transform 1.4s var(--ease) .15s; }
+@keyframes fs { to { opacity: 1; transform: none; } }
+/* the mark beside the kicker ties its own string once (on every screen; on a phone it is the signature) */
+.kick-line { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.open-anim .kick-line { stroke-dashoffset: 1; animation: fs-draw 0s 2.5s forwards; }
+.open-anim .hero.is-in .kick-line { stroke-dashoffset: 0; animation: none; transition: stroke-dashoffset 1.8s var(--ease-io) .5s; }
+@keyframes fs-draw { to { stroke-dashoffset: 0; } }
+
+/* tablet and phone: the stroller above, the words below (the phone decides the axis again) */
+@media (max-width: 1023px) {
+  .hero { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: end; padding-bottom: clamp(24px, 4svh, 48px); /* qa-allow: sec, fitted to the phone viewport */ }
+  .hero-media { order: -1; align-self: stretch; height: auto; min-height: clamp(220px, 40svh, 520px); }
+  .hero-media img { position: absolute; height: clamp(220px, 40svh, 520px); }
+  .hero-media { position: relative; }
+  .hero-text { padding-block: clamp(12px, 2svh, 24px) 0; gap: 14px; /* qa-allow: sec, fitted to the phone viewport */ }
+  .hero h1 { max-width: none; }
+}
+@media (max-width: 767px) {
+  .hero-media, .hero-media img { min-height: 0; height: clamp(200px, 34svh, 340px); }
+  .lead { font-size: calc(17px * var(--a11y-scale)); }
+  .hero .cta { flex-wrap: nowrap; gap: 10px; width: 100%; }
+  .hero .cta .btn { flex: 1 1 auto; padding: 0 16px; }
+  .hero .cta .lg { display: none; }
+}
+@media (max-width: 767px) and (max-height: 700px) { .hero .kick > span { font-size: 13px; } }
+
+/* ---------- the balloon string: an overlay on main, its path measured from the page by js/site.js (wide screens only) ---------- */
+main { position: relative; display: block; }
+.thread { position: absolute; inset: 0; z-index: 3; pointer-events: none; display: none; }
+.thread.is-on { display: block; }
+.thread-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.thread-path { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.thread-balloon { position: absolute; left: 0; top: 0; width: 30px; height: 39px; fill: var(--ink); overflow: visible; /* qa-allow: physical, MotionPath writes x/y in the path's own physical box */ }
+
+/* ---------- statement: C14 monologue + MV:g152, an image opens inside the heading. A breath section ---------- */
+.statement { padding: var(--sec-breath) var(--gutter); background: var(--surface); }
+.mbt { container-type: inline-size; max-width: min(1000px, 72vw); margin-inline: auto; text-align: center; /* qa-allow: frame, this is the measure of the brand sentence, not a page container */ }
+.eyebrow { margin: 0 0 clamp(20px, 2vw, 32px); font-size: var(--fs-small); color: var(--muted); }
+.mbt-h { margin: 0; font-family: var(--f-display); font-weight: 100; line-height: 1.12; letter-spacing: -.01em; color: var(--ink); font-size: calc(clamp(36px, 10.6cqi, 62px) * var(--a11y-scale)); }
+.mbt-line { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; }
+.mbt-w { display: block; margin-inline: .14em; white-space: nowrap; }
+.mbt-slot { display: block; flex: none; position: relative; width: 1.8em; height: .8em; margin-inline: .1em; }
+.mbt-pill { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: 999px; background: var(--line); }
+.mbt-pill img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+.mbt-cap { margin: clamp(28px, 3vw, 48px) auto 0; max-width: 52ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+@media (min-width: 768px) {
+  .mbt-h { font-size: calc(clamp(44px, 7cqi, 115px) * var(--a11y-scale)); }
+  .mbt-line { flex-wrap: nowrap; }
+  .mbt-slot { width: 2.2em; }
+}
+.mbt-flip .mbt-slot:not(.is-open) { width: 0; margin-inline: 0; }
+@media (hover: hover) and (pointer: fine) { .mbt:hover .mbt-pill img { transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .mbt-pill img { transition: none; } }
+@media (max-width: 767px) { .mbt { max-width: none; } }
+
+/* ---------- shared section bits ---------- */
+.sec-head { display: grid; justify-items: start; gap: clamp(12px, 1.2vw, 20px); margin-bottom: clamp(32px, 4vw, 88px); }
+.sec-head .kick { color: var(--muted); }
+.sec-head h2 { max-width: 16ch; }
+.js .reveal { opacity: 0; }
+.js .reveal.is-in { animation: reveal .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 80ms); }
+@keyframes reveal { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: none; } }
+@media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; } .js .reveal.is-in { animation: none; } }
+
+/* ---------- the Flash: C11 sticky split + MV:g05, the photo changes as each point arrives ---------- */
+.flash { padding: var(--sec) var(--gutter); background: var(--surface); }
+.sync { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 144px); align-items: start; }
+.sync-texts .block { min-height: 80vh; display: grid; align-content: center; justify-items: start; gap: 16px; }
+.num { font-size: var(--fs-micro); letter-spacing: .16em; color: var(--muted); }
+.block h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(32px, 2vw + .9rem, 64px) * var(--a11y-scale)); line-height: 1.04; }
+.block p { max-width: 34ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+.sync-media { position: sticky; top: 15vh; height: 70vh; background: var(--paper); }
+.si { position: absolute; inset: 0; margin: 0; display: grid; grid-template-rows: minmax(0, 1fr); place-items: center;   /* a sized row, so the photo's % height is read from the frame and not from its own width */
+  overflow: hidden; background: var(--paper); }
+.si img { width: 100%; height: 100%; object-fit: cover; }
+.si-cut img { width: 82%; height: 88%; object-fit: contain; object-position: 50% 100%; align-self: end; margin-bottom: 4%; }
+.flash-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: clamp(24px, 3vw, 56px); }
+@media (max-width: 767px) {
+  .sync { grid-template-columns: 1fr; gap: 0; }
+  .sync-media { position: sticky; top: 0; z-index: 1; order: -1; height: 40svh; }
+  /* the frame pads the bottom, so the photo can never run past it (a margin in % is read from the width and pushed it 10px out) */
+  .si-cut { place-items: end center; padding-bottom: 12px; }
+  .si-cut img { height: 84%; margin-bottom: 0; align-self: auto; }
+  .sync-texts .block { min-height: 58svh; padding-top: 24px; align-content: start; }
+  .sync-texts .block:first-child { padding-top: 32px; }
+}
+
+/* ---------- more from the family: C9 floating layers + MV:g12. The products float on the paper at their own depth ---------- */
+.family { padding: var(--sec) var(--gutter); background: var(--paper); overflow: clip; }
+.family .sec-head { margin-bottom: 0; }
+.fam-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-m); align-items: start; }
+.fam { display: grid; justify-items: start; gap: 10px; }
+/* the Ping sells; the chair is there for the image (Kobi). So the stroller stands taller and first, the chair smaller and lower */
+.fam-ping { grid-column: 1 / span 5; }
+.fam-yippy { grid-column: 8 / span 4; margin-top: clamp(64px, 12vw, 256px); }
+.fam-media { justify-self: stretch; display: flex; justify-content: center; align-items: flex-end; aspect-ratio: 4 / 5; margin-bottom: clamp(16px, 2vw, 32px); }
+.fam-media img { width: auto; height: 100%; max-width: 100%; object-fit: contain; object-position: 50% 100%; }
+.fam-yippy .fam-media img { height: 86%; }
+.fam h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(30px, 1.6vw + .9rem, 54px) * var(--a11y-scale)); line-height: 1.04; }
+.fam p { max-width: 34ch; font-size: var(--fs-body); color: var(--muted); }
+@media (max-width: 767px) {
+  .fam-grid { grid-template-columns: 1fr; row-gap: 56px; }
+  .fam-ping, .fam-yippy { grid-column: 1; margin-top: 0; }
+  .fam-ping { margin-top: 40px; }
+  .fam-media { aspect-ratio: 1; }
+}
+
+/* ---------- awards: C10, a quiet band ---------- */
+.awards { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: clamp(32px, 5vw, 128px); padding: var(--sec) var(--gutter); background: var(--surface); }
+.aw-text { display: grid; gap: 16px; justify-items: start; }
+.aw-text h2 { max-width: 14ch; }
+.aw-text p { max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.aw-list { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-start; gap: clamp(20px, 3vw, 64px); }
+.aw-list li { display: grid; justify-items: start; align-content: start; gap: 14px; width: clamp(132px, 11vw, 196px); text-align: start;   /* one axis with the heading */ font-size: var(--fs-micro); line-height: 1.45; color: var(--muted); }
+.aw-list li > span { display: grid; gap: 4px; }
+.aw-list li b { font-weight: 400; color: var(--ink); }
+.aw-list img { height: clamp(110px, 9vw, 168px); width: auto; }
+@media (max-width: 1023px) { .awards { grid-template-columns: 1fr; } }
+@media (max-width: 767px) {
+  .aw-list { gap: 12px; justify-content: space-between; }
+  .aw-list li { width: auto; flex: 1 1 0; font-size: 13px; }
+  .aw-list img { height: 96px; }
+}
+
+/* ---------- since 2004: C8 editorial ---------- */
+.heritage { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; gap: clamp(40px, 6vw, 160px); padding: var(--sec) var(--gutter) var(--sec-breath); background: var(--surface); }
+.hr-media { margin: 0; background: var(--paper); }
+.hr-media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.hr-text { display: grid; gap: 20px; justify-items: start; }
+.hr-text h2 { max-width: 14ch; }
+.hr-text p { max-width: 46ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+@media (max-width: 767px) { .heritage { grid-template-columns: 1fr; padding-bottom: var(--sec); } }
+
+/* ---------- closing ---------- */
+.closing { display: grid; justify-items: center; gap: 24px; padding: var(--sec-breath) var(--gutter); background: var(--forest); color: var(--on-dark); text-align: center; }
+.closing h2 { color: var(--on-dark); max-width: 16ch; }
+.closing p { max-width: 44ch; font-size: var(--fs-body); line-height: 1.6; color: var(--on-dark-muted); }
+.closing .cta { justify-content: center; margin-top: 8px; }
+.closing :focus-visible { box-shadow: 0 0 0 2px var(--forest), 0 0 0 4px var(--on-dark); }
+
+/* ---------- footer: MV:ft8, the brand signature: the balloon, whole and quiet, in the empty corner ---------- */
+.ftw { position: relative; isolation: isolate; overflow: hidden; padding: clamp(56px, 6vw, 112px) var(--gutter) 40px; background: var(--ink); color: var(--on-dark); font-size: var(--fs-small); line-height: 1.6; }
+.ftw a { color: inherit; text-decoration: none; opacity: .8; transition: opacity .15s var(--ease); }
+.ftw :focus-visible { box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--on-dark); }
+.ftw h3 { margin: 0 0 14px; font-family: var(--f-text); font-size: var(--fs-micro); font-weight: 400; color: rgba(255,255,255,.6); }
+.ftw ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ft8-mark { position: absolute; z-index: -1; inset-inline-end: clamp(-60px, -2vw, -16px); bottom: clamp(-160px, -8vw, -40px); width: clamp(260px, 26vw, 500px); aspect-ratio: 52 / 68; height: auto; fill: var(--on-dark); opacity: 0; transition: opacity 1.4s var(--ease); }
+.ft8.is-in .ft8-mark { opacity: .06; }
+.ft8-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; padding-bottom: clamp(32px, 4vw, 64px); border-bottom: 1px solid rgba(255,255,255,.14); }
+.ft-logo { display: inline-flex; opacity: 1 !important; }
+.ft-logo svg { display: block; width: clamp(170px, 13vw, 250px); height: auto; aspect-ratio: 439 / 94.6; fill: currentColor; }
+.ft8-top p { color: rgba(255,255,255,.66); }
+.ft8-row { display: grid; grid-template-columns: repeat(3, minmax(0, 240px)); gap: clamp(28px, 5vw, 112px); padding-top: clamp(32px, 4vw, 64px); }
+.ft-legal { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: clamp(48px, 5vw, 96px); font-size: var(--fs-micro); color: rgba(255,255,255,.66); }
+.ft-legal p { margin: 0; }
+.ft-legal nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.ft-credit { margin-inline-start: auto; }
+.ft-rv { opacity: 1; }
+.js .ft8 .ft-rv { opacity: 0; transform: translateY(14px); }
+.js .ft8.is-in .ft-rv { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); }
+@media (hover: hover) and (pointer: fine) { .ftw a:hover { opacity: 1; } }
+@media (max-width: 1023px), (pointer: coarse) {
+  .ftw li a, .ft-legal a { display: inline-flex; align-items: center; min-height: 44px; }
+  .ftw ul { gap: 0; }
+}
+@media (max-width: 899px) { .ft8-mark { display: none; } }
+@media (max-width: 767px) {
+  .ft8-row { grid-template-columns: 1fr 1fr; }
+  .ft8-row > div:last-child { grid-column: 1 / -1; }
+  .ft-credit { margin-inline-start: 0; flex-basis: 100%; }
+  .ftw { padding-bottom: calc(40px + 76px); }   /* room for the phone's action bar */
+}
+@media (prefers-reduced-motion: reduce) { .js .ft8 .ft-rv { opacity: 1; transform: none; } .ft8-mark { transition: none; } }
+
+/* ---------- floating: WhatsApp and the accessibility toolbar. They never sit on running text:
+   from 1280 they are centred in the gutter, 768 to 1279 a tab on the edge, under 768 a bar ---------- */
+.fabs { position: fixed; z-index: 70; inset-inline-end: max(4px, calc((var(--gutter) - 48px) / 2)); bottom: 16px; display: grid; gap: 10px; justify-items: end; }
+.fab { position: relative; display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: var(--r-control); cursor: pointer; text-decoration: none;
+  transition: opacity .24s var(--ease), transform .24s var(--ease), background-color .18s var(--ease), visibility 0s linear 0s; }
+.fab .ic { width: 24px; height: 24px; }
+.fab-wa { background: var(--ink); color: #fff; box-shadow: 0 10px 28px rgba(34,34,34,.22); }
+.fab-wa.is-off { opacity: 0; transform: translateY(12px); visibility: hidden; pointer-events: none; transition: opacity .24s var(--ease), transform .24s var(--ease), visibility 0s linear .24s; }
+.fab-a11y { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink), 0 10px 28px rgba(34,34,34,.14); }
+.fab-tip { position: absolute; inset-inline-end: calc(100% + 10px); padding: 8px 14px; border-radius: var(--r-control); background: var(--ink); color: #fff; font-size: var(--fs-micro); white-space: nowrap; opacity: 0; transform: translateX(-6px); pointer-events: none; transition: opacity .18s var(--ease), transform .18s var(--ease); }
+@media (hover: hover) and (pointer: fine) { .fab-wa:hover .fab-tip { opacity: 1; transform: none; } .fab-wa:hover { background: #3b3d3b; } }
+.fab-wa:focus-visible .fab-tip { opacity: 1; transform: none; }
+.fab:active { transform: scale(.96); }
+@media (min-width: 768px) and (max-width: 1279px) {
+  .fabs { inset-inline-end: 4px; }
+  .fab { width: 40px; height: 40px; }
+  .fab .ic { width: 20px; height: 20px; }
+}
+@media (max-width: 767px) {
+  .fabs { inset-inline: 0; bottom: 0; display: flex; gap: 0; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); background: var(--surface); box-shadow: 0 -8px 24px rgba(34,34,34,.08);
+    transition: transform .3s var(--ease), visibility 0s linear 0s; }
+  .fabs.is-off { transform: translateY(110%); visibility: hidden; transition: transform .3s var(--ease), visibility 0s linear .3s; }
+  .fab { height: 52px; box-shadow: none; }
+  .fab-wa { flex: 1 1 auto; width: auto; display: flex; gap: 10px; font-size: calc(16.5px * var(--a11y-scale)); }
+  .fab-wa.is-off { opacity: 1; transform: none; visibility: visible; pointer-events: auto; }
+  .fab-tip { position: static; padding: 0; background: none; opacity: 1; transform: none; font-size: inherit; }
+  .fab-a11y { width: 52px; margin-inline-start: 8px; box-shadow: inset 0 0 0 1.5px var(--ink); }
+}
+
+/* ---------- accessibility panel (B19, ת"י 5568), shared with Baby Boss ---------- */
+.a11y-scrim { position: fixed; inset: 0; z-index: 89; background: rgba(34,34,34,.4); opacity: 0; visibility: hidden; transition: opacity .24s var(--ease), visibility 0s linear .24s; }
+.a11y-scrim.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+.a11y-panel { position: fixed; z-index: 90; inset-inline-end: 16px; bottom: 84px; width: min(380px, calc(100vw - 32px)); max-height: min(600px, calc(100svh - 120px)); display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(34,34,34,.22); opacity: 0; transform: translateY(8px); visibility: hidden; transition: opacity .18s var(--ease), transform .24s var(--ease), visibility 0s linear .24s; }
+.a11y-panel.open { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+.a11y-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+.a11y-head h2 { font-family: var(--f-text); font-size: calc(19px * var(--a11y-scale)); font-weight: 400; line-height: 1.3; }
+.a11y-x { width: 44px; height: 44px; border: 0; border-radius: var(--r-control); background: var(--paper); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; transition: background-color .15s var(--ease); }
+.a11y-opts { overflow-y: auto; padding: 8px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.a11y-row { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding-bottom: 4px; }
+.a11y-row > span { font-size: var(--fs-small); color: var(--ink); }
+.a11y-opts button { min-height: 52px; padding: 8px 12px; border: 0; border-radius: 16px; background: var(--paper); font-size: var(--fs-small); line-height: 1.3; color: var(--ink); cursor: pointer; text-align: center; transition: background-color .15s var(--ease), color .15s var(--ease); }
+.a11y-row button { min-height: 44px; padding: 0 16px; border-radius: var(--r-control); }
+.a11y-opts button[aria-pressed="true"] { background: var(--ink); color: var(--on-dark); }
+.a11y-opts [data-reset] { grid-column: 1 / -1; background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent); }
+.a11y-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; padding: 8px 20px 16px; }
+.a11y-note { font-size: 13px; color: var(--muted); }
+.a11y-foot a { min-height: 44px; display: inline-flex; align-items: center; color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .a11y-opts button:not([aria-pressed="true"]):hover, .a11y-x:hover { background: var(--line); } }
+@media (max-width: 767px) { .a11y-panel { inset-inline: 0; bottom: 0; width: 100%; max-height: 82svh; border-radius: 24px 24px 0 0; transform: translateY(24px); padding-bottom: env(safe-area-inset-bottom); } }
+html.a11y-contrast body, html.a11y-contrast section, html.a11y-contrast .ftw, html.a11y-contrast .h8-card::before, html.a11y-contrast .a11y-panel, html.a11y-contrast .si, html.a11y-contrast .sync-media { background: #000 !important; color: #fff !important; }
+html.a11y-contrast p, html.a11y-contrast span, html.a11y-contrast h1, html.a11y-contrast h2, html.a11y-contrast h3, html.a11y-contrast .h8x, html.a11y-contrast .hlogo { color: #fff !important; }
+html.a11y-contrast a, html.a11y-contrast .tlink { color: #ffe14d !important; }
+html.a11y-contrast .btn-solid, html.a11y-contrast .btn-light { background: #ffe14d !important; color: #000 !important; }
+html.a11y-contrast .thread-path { stroke: #fff; } html.a11y-contrast .thread-balloon, html.a11y-contrast .kick-mark { fill: #fff; }
+html.a11y-gray { filter: grayscale(1); }
+html.a11y-invert { filter: invert(1) hue-rotate(180deg); }
+html.a11y-invert img { filter: invert(1) hue-rotate(180deg); }
+html.a11y-links a { text-decoration: underline !important; text-underline-offset: 3px; outline: 2px solid rgba(34,34,34,.6); outline-offset: 2px; }
+html.a11y-font body, html.a11y-font h1, html.a11y-font h2, html.a11y-font h3, html.a11y-font .btn, html.a11y-font button { font-family: Arial, sans-serif !important; font-weight: 400 !important; }
+html.a11y-spacing p, html.a11y-spacing li { line-height: 1.95 !important; word-spacing: .12em; }
+html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+
+/* focus stays visible in Windows high contrast, where box-shadow is dropped */
+@media (forced-colors: active) { :focus-visible { outline: 2px solid CanvasText; outline-offset: 2px; } }
+
+/* ---------- 404 (library/conversion.md, the sister site's pattern) ---------- */
+.nf { min-height: 100svh; display: grid; align-content: center; justify-items: center; gap: 24px; padding: calc(var(--hdr) + 48px) var(--gutter) var(--sec); background: var(--paper); text-align: center; }
+.nf-code { font-size: var(--fs-micro); letter-spacing: .2em; color: var(--muted); }
+.nf h1 { max-width: 16ch; font-size: var(--fs-h2); }
+.nf > p:not(.nf-code) { max-width: var(--measure); font-size: var(--fs-lead); line-height: 1.6; color: var(--muted); }
+.nf-cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 24px; }
+
+/* ======================================================================================================
+   The Flash page (R9 product page, premium: the first screen is a stage). Compositions: C7 stage · C1 fold · C2 Cozy ·
+   C13 fabrics · colours (the signature) · C1 car seat · C8 specs · questions · closing. Moves: MV:g12 on the stage
+   and the fabrics (approved for this project on the home page). Nothing new is introduced here.
+   ====================================================================================================== */
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- stage: C7, the name stands huge behind the stroller ---------- */
+.p-hero .hero-text, .p-hero .hero-media { position: relative; z-index: 1; }
+.p-word { position: absolute; z-index: 0; inset-inline-end: calc(var(--gutter) * .5); bottom: 4vh; margin: 0; font-family: var(--f-display); font-weight: 100; font-size: min(26vw, 46vh); line-height: .8; letter-spacing: -.04em; color: color-mix(in srgb, var(--ink) 7%, var(--paper)); pointer-events: none; user-select: none; }
+.open-anim .p-hero .p-word { opacity: 0; animation: fs 0s 2.5s forwards; }
+.open-anim .p-hero.is-in .p-word { opacity: 1; animation: none; transition: opacity 1.4s var(--ease) .1s; }
+@media (max-width: 1023px) { .p-word { inset-inline: 0; bottom: auto; top: calc(var(--hdr) + 2svh); text-align: center; font-size: 34vw; } }
+
+/* ---------- fold: C1, the words on the start side, the bassinet from above on the other ---------- */
+.fold { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(40px, 6vw, 144px); padding: var(--sec) var(--gutter); background: var(--surface); }
+.fold-text { grid-column: 1; grid-row: 1; display: grid; gap: 20px; justify-items: start; }
+.fold-media { grid-column: 2; grid-row: 1; margin: 0; background: var(--paper); }
+.fold-media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.fold-text h2, .cozy-card h2, .fb-text h2, .seat-text h2 { max-width: 14ch; }
+.fold-text p:not(.kick), .cozy-card p:not(.kick), .fb-text p:not(.kick), .seat-text p:not(.kick) { max-width: 46ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+
+/* ---------- Cozy Cloud: C2, the card rests over the edge of the photo ---------- */
+.cozy { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; padding: var(--sec) var(--gutter); background: var(--paper); }
+.cozy-media { grid-column: 5 / -1; grid-row: 1; margin: 0; }
+.cozy-media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.cozy-card { position: relative; z-index: 1; grid-column: 1 / 7; grid-row: 1; display: grid; gap: 20px; justify-items: start; padding: clamp(32px, 4vw, 88px); background: var(--surface); }
+
+/* ---------- fabrics: C13, an asymmetric mosaic of close-ups, each at its own depth ---------- */
+.fabrics { padding: var(--sec) var(--gutter); background: var(--surface); }
+.fb-text { display: grid; gap: 20px; justify-items: start; margin-bottom: clamp(40px, 5vw, 96px); }
+.fb-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(72px, 8.4vw, 200px); gap: var(--gap-s); }
+.fb { position: relative; margin: 0; overflow: hidden; background: var(--paper); }
+.fb img { position: absolute; inset-inline: 0; top: -8%; width: 100%; height: 116%; object-fit: cover; }
+.fb-1 { grid-column: 1 / span 7; grid-row: 1 / span 4; }
+.fb-2 { grid-column: 8 / span 5; grid-row: 1 / span 3; }
+.fb-3 { grid-column: 9 / span 4; grid-row: 4 / span 3; }
+.fb-4 { grid-column: 2 / span 4; grid-row: 5 / span 3; }
+.fb-5 { grid-column: 6 / span 3; grid-row: 5 / span 2; }
+.fb-1 img { object-position: 50% 40%; }
+.fb-3 img { object-position: 30% 50%; }
+
+/* ---------- colours: the signature. The chosen colour wipes in over the last one ---------- */
+.colors { display: grid; justify-items: center; padding: var(--sec) var(--gutter); background: var(--paper); text-align: center; }
+.co-head { display: grid; justify-items: center; gap: 16px; }
+.co-stage { position: relative; width: min(100%, 720px); height: clamp(360px, 62vh, 760px); margin-block: clamp(24px, 3vw, 56px); }
+.co-img { position: absolute; inset: 0; margin: 0; display: flex; justify-content: center; align-items: flex-end; clip-path: inset(0 0 0 100%); }
+.co-img.is-on, .co-img.is-going { clip-path: inset(0 0 0 0); }
+.co-img img { height: 100%; width: auto; max-width: 100%; object-fit: contain; object-position: 50% 100%; }
+.co-anim .co-img.is-on { transition: clip-path .9s var(--ease-io); }
+.co-pick { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px clamp(16px, 2vw, 40px); margin: 0; padding: 0; border: 0; }
+.sw { position: relative; display: grid; justify-items: center; gap: 10px; min-width: 112px; padding: 8px; cursor: pointer; font-size: var(--fs-micro); line-height: 1.4; color: var(--muted); }
+.sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.sw i { display: block; width: 44px; height: 44px; border-radius: 50%; background: var(--sw); box-shadow: 0 0 0 4px var(--sw-gap, var(--paper)), 0 0 0 5px color-mix(in srgb, var(--ink) 18%, transparent); transition: box-shadow .2s var(--ease); }
+.sw span { display: grid; gap: 2px; }
+.sw b { font-weight: 400; font-size: var(--fs-small); color: var(--ink); }
+.sw input:checked + i { box-shadow: 0 0 0 4px var(--sw-gap, var(--paper)), 0 0 0 6px var(--ink); }
+.sw input:focus-visible + i { box-shadow: 0 0 0 4px var(--sw-gap, var(--paper)), 0 0 0 6px var(--ink), 0 0 0 9px color-mix(in srgb, var(--ink) 30%, transparent); }
+@media (hover: hover) and (pointer: fine) { .sw:hover input:not(:checked) + i { box-shadow: 0 0 0 4px var(--sw-gap, var(--paper)), 0 0 0 6px color-mix(in srgb, var(--ink) 45%, transparent); } }
+.co-cta { margin-top: clamp(24px, 2.4vw, 40px); }
+
+/* ---------- car seat: C1, the answer and the adapter finder ---------- */
+.seat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(40px, 6vw, 144px); padding: var(--sec) var(--gutter); background: var(--surface); }
+.seat-text { display: grid; gap: 20px; justify-items: start; }
+.finder { display: grid; gap: 24px; justify-items: start; padding: clamp(28px, 3.4vw, 72px); background: var(--paper); }
+.finder fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.finder legend { padding: 0; margin-bottom: 18px; font-size: var(--fs-h3); line-height: 1.3; color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { position: relative; display: inline-flex; }
+.chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: var(--r-control); background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 18%, transparent); font-size: var(--fs-small); color: var(--ink); transition: background-color .15s var(--ease), color .15s var(--ease), box-shadow .15s var(--ease); }
+.chip input:checked + span { background: var(--ink); color: var(--on-dark); box-shadow: none; }
+.chip input:focus-visible + span { box-shadow: var(--focus); }
+@media (hover: hover) and (pointer: fine) { .chip input:not(:checked):hover + span { box-shadow: inset 0 0 0 1px var(--ink); } }
+.finder-ans { min-height: 3.2em; max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.finder-ans b { font-weight: 400; color: var(--ink); }
+
+/* ---------- specs and questions: C8, the heading stays while the rows pass ---------- */
+.specs, .faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(32px, 6vw, 144px); padding: var(--sec) var(--gutter); background: var(--surface); }
+.specs { background: var(--paper); }
+.sp-head, .fq-head { position: sticky; top: calc(var(--hdr) + 24px); display: grid; gap: 16px; justify-items: start; }
+.sp-list { margin: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.sp-list > div { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; padding: 20px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.sp-list dt { font-size: var(--fs-body); color: var(--ink); }
+.sp-list dd { margin: 0; font-size: var(--fs-body); color: var(--text); }
+.tbd { display: inline-flex; align-items: center; min-height: 28px; padding: 0 12px; border: 1px dashed color-mix(in srgb, var(--ink) 35%, transparent); border-radius: var(--r-control); font-size: var(--fs-micro); color: var(--muted); }
+.fq-list { border-top: 1px solid var(--line); }
+.fq-list details { border-bottom: 1px solid var(--line); }
+.fq-list summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; min-height: 72px; padding: 16px 0; font-size: var(--fs-h3); line-height: 1.35; color: var(--ink); cursor: pointer; list-style: none; }
+.fq-list summary::-webkit-details-marker { display: none; }
+.fq-list summary i { position: relative; flex: none; width: 16px; height: 16px; }
+.fq-list summary i::before, .fq-list summary i::after { content: ""; position: absolute; inset-inline: 0; top: 7px; height: 1.5px; border-radius: 2px; background: currentColor; }
+.fq-list summary i::after { transform: rotate(90deg); transition: transform .3s var(--ease); }
+.fq-list details[open] summary i::after { transform: rotate(0deg); }
+.fq-list details p { max-width: 56ch; padding-bottom: 24px; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+@media (hover: hover) and (pointer: fine) { .fq-list summary:hover { color: var(--forest); } }
+
+/* ---------- the Flash page on tablet and phone ---------- */
+@media (max-width: 1023px) {
+  .cozy-media { grid-column: 1 / -1; }
+  .cozy-card { grid-column: 2 / -2; grid-row: 2; margin-top: -72px; }
+  .specs, .faq { grid-template-columns: 1fr; }
+  .sp-head, .fq-head { position: static; }
+}
+@media (max-width: 767px) {
+  .fold, .seat { grid-template-columns: 1fr; }
+  .fold-text, .fold-media { grid-column: 1; grid-row: auto; }
+  .fold-media { order: -1; }
+  .cozy { padding-block: var(--sec); }
+  .cozy-card { grid-column: 1 / -1; margin: -40px 16px 0; padding: 28px 24px; }
+  .fb-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; }
+  .fb { aspect-ratio: 4 / 3; }
+  .fb-1 { grid-column: 1 / -1; grid-row: auto; }
+  .fb-2, .fb-3, .fb-4, .fb-5 { grid-column: auto; grid-row: auto; }
+  .fb-5 { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  .co-stage { height: clamp(300px, 52svh, 480px); }
+  .co-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
+  .sw { min-width: 0; padding-inline: 0; }
+  .finder { padding: 28px 20px; }
+  .fq-list summary { min-height: 64px; }
+}
+@media (prefers-reduced-motion: reduce) { .co-anim .co-img.is-on, .fq-list summary i::after { transition: none; } }
+html.a11y-contrast .finder, html.a11y-contrast .cozy-card, html.a11y-contrast .chip span { background: #000 !important; color: #fff !important; }
+
+/* ======================================================================================================
+   The Ping page (R9, the Flash page's sibling). C7 stage with the version switch · compare cards · the signature, C11
+   sticky split + MV:g05 (open, folded, in its bag) · colours on white · C8 specs table · questions · closing.
+   Moves: MV:g12 on the stage and MV:g05 in the trip, both approved for this project. Nothing new is introduced here.
+   ====================================================================================================== */
+/* ---------- stage: both versions stand in one place, and the chosen one wipes in over the other ---------- */
+.p-hero .hero-media { position: relative; }
+.p-word.has-desc { bottom: calc(4vh + .16em); }   /* "Ping" has a descender: lift it so the g is whole */
+.p-hero .co-img img { position: static; height: 100%; width: auto; max-width: 100%; }
+
+/* ---------- the version switch: one segmented control, repeated above the colours, always in step ---------- */
+.seg { display: inline-flex; min-width: 0; margin: 0; padding: 4px; border: 0; border-radius: var(--r-control); background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent); }
+.seg label { position: relative; display: inline-flex; }
+.seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.seg span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px; border-radius: var(--r-control); font-size: var(--fs-small); color: var(--ink); white-space: nowrap; transition: background-color .2s var(--ease), color .2s var(--ease); }
+.seg input:checked + span { background: var(--ink); color: var(--on-dark); }
+.seg input:focus-visible + span { box-shadow: var(--focus); }
+@media (hover: hover) and (pointer: fine) { .seg input:not(:checked):hover + span { background: color-mix(in srgb, var(--ink) 7%, transparent); } }
+.seg-c { margin-top: clamp(20px, 2vw, 32px); background: var(--paper); box-shadow: none; }
+
+/* ---------- compare: two cards; the wheels are the difference, so the wheels are the photo ---------- */
+.compare { padding: var(--sec) var(--gutter); background: var(--surface); }
+.vc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-m); }
+.vcard { position: relative; display: grid; grid-template-rows: auto 1fr; background: var(--paper); }
+.vcard::after { content: ""; position: absolute; inset: 0; border: 1px solid transparent; pointer-events: none; transition: border-color .3s var(--ease); }
+.vcard.is-sel::after { border-color: var(--ink); }
+.vcard figure { margin: 0; overflow: hidden; background: var(--surface); }
+.vcard img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 78%; }
+.vc-body { display: grid; justify-items: start; align-content: start; gap: 16px; padding: clamp(24px, 3vw, 56px); }
+.vc-body h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(32px, 2vw + .9rem, 64px) * var(--a11y-scale)); line-height: 1.04; }
+.vc-body p { max-width: 34ch; font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+.vc-facts { display: flex; flex-wrap: wrap; gap: 8px 40px; margin: 8px 0; }
+.vc-facts div { display: grid; gap: 2px; }
+.vc-facts dt { font-size: var(--fs-micro); color: var(--muted); }
+.vc-facts dd { margin: 0; font-size: var(--fs-h3); color: var(--ink); }
+.vcard .vc-on, .vcard.is-sel .vc-off { display: none; }
+.vcard.is-sel .vc-on { display: inline; }
+.vcard.is-sel .btn { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
+
+/* ---------- the trip: the home page's sticky split, on the paper, so the stroller stands free ---------- */
+.trip { padding: var(--sec) var(--gutter); background: var(--paper); }
+.trip .sec-head { margin-bottom: 0; }
+.trip-after { max-width: 46ch; margin-top: clamp(24px, 3vw, 56px); font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+
+/* ---------- colours on white: the brown-grey swatch shows only with the Trekking ---------- */
+.colors-w { --sw-gap: var(--surface); background: var(--surface); }
+.colors-w .co-stage { width: min(100%, 560px); }
+.sw[hidden] { display: none; }
+.co-cta.cta { justify-content: center; }
+
+/* ---------- specs: one column per version; a row both share spans both ---------- */
+.sp-src { max-width: 30ch; font-size: var(--fs-small); color: var(--muted); }
+.sp-table { width: 100%; border-collapse: collapse; font-size: var(--fs-body); }
+.sp-table th, .sp-table td { padding-block: 18px; padding-inline: 0 24px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); font-weight: 400; text-align: start; vertical-align: baseline; }
+.sp-table thead th { padding-top: 0; font-size: var(--fs-small); color: var(--muted); }
+.sp-table tbody th { width: 30%; color: var(--ink); }
+.sp-table td { color: var(--text); }
+.sp-table .sp-group th { width: auto; padding-top: clamp(32px, 3vw, 48px); font-size: var(--fs-micro); color: var(--muted); }
+
+@media (max-width: 767px) {
+  .hero .seg { width: 100%; }
+  .hero .seg label { flex: 1 1 auto; }
+  .hero .seg span { width: 100%; justify-content: center; padding: 0 12px; }
+  .vc-grid { grid-template-columns: 1fr; }
+  .colors-w .co-pick { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .co-cta .btn { white-space: normal; text-align: center; }
+  .sp-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .sp-table, .sp-table tbody { display: block; }
+  .sp-table .sp-group { display: block; padding-block: 32px 0; }
+  .sp-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; padding-block: 16px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+  .sp-table th, .sp-table td { padding: 0; border: 0; }
+  .sp-table tbody th, .sp-table td[colspan] { grid-column: 1 / -1; width: auto; }
+  .sp-table td[data-v]::before { content: attr(data-v); display: block; font-size: var(--fs-micro); color: var(--muted); }
+}
+html.a11y-contrast .vcard, html.a11y-contrast .seg { background: #000 !important; color: #fff !important; }
+
+/* ---------- high-chair page ---------- */
+@media (min-width: 1024px) { .y-word { font-size: min(17vw, 36vh); } }   /* "Yippy" is longer than "Ping": smaller, so it stays clear of the text column */
+@media (max-width: 767px) { .y-hero, .y-hero img { height: clamp(180px, 28svh, 300px); } }   /* the gift line adds a row: a shorter chair keeps the buttons on the first screen */
+.gift { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; max-width: 46ch; margin: 0; font-size: var(--fs-small); line-height: 1.5; color: var(--text); }
+.gift b { display: inline-flex; align-items: center; min-height: 28px; padding: 0 14px; border-radius: var(--r-control); background: var(--sun); font-weight: 400; color: var(--ink); }
+.grow, .grow .sync-media { background: var(--surface); }
+.grow .si img { mix-blend-mode: multiply; }   /* the studio white of the photos melts into the page */
+.yfold { background: var(--paper); }
+.yfold .fold-media { display: flex; justify-content: center; align-items: flex-end; gap: clamp(24px, 4vw, 96px); height: clamp(380px, 64vh, 760px); padding: clamp(24px, 3vw, 56px); background: var(--surface); }
+.yfold figure { display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: start; gap: 14px; height: 100%; margin: 0; }
+.yfold .fold-media img { width: auto; height: 100%; max-width: 100%; aspect-ratio: auto; object-fit: contain; object-position: 50% 100%; mix-blend-mode: multiply; }
+.yfold figcaption { font-size: var(--fs-micro); color: var(--muted); }
+.co-lead { max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.sw-wood i { background-color: var(--paper); }
+.starter .cozy-media { background: var(--paper); }   /* the reveal isolates the figure, so the paper the photo melts into sits in it */
+.starter .cozy-media img { mix-blend-mode: multiply; }   /* the chair stands on the paper, the card beside it */
+.grow h3 { text-wrap: balance; }
+.cozy-card p.st-note { color: var(--ink); }
+.specs-w { background: var(--surface); }
+@media (max-width: 767px) {
+  .yfold .fold-media { height: clamp(260px, 46svh, 420px); padding: 20px; }
+  .grow .sync-media { height: 44svh; }
+}
+
+/* ======================================================================================================
+   The About page (R6 about as a story, rhythm P4 story-scroll). Compositions: C7 the year huge beside the headline ·
+   C6 spine · principles · closing. The signature: the balloon's string runs down the spine and draws itself as you read
+   (the home page's string, approved there, told as the brand's years). Nothing new is introduced elsewhere.
+   ====================================================================================================== */
+.a-hero { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; align-items: stretch; padding-bottom: 0; }
+.a-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; column-gap: clamp(24px, 4vw, 96px); }
+.a-word { justify-self: end; margin: 0; font-family: var(--f-display); font-weight: 100; font-size: min(15vw, 30vh); line-height: .8; letter-spacing: -.04em; color: color-mix(in srgb, var(--ink) 9%, var(--paper)); pointer-events: none; user-select: none; }
+.a-band { margin: 0 calc(var(--gutter) * -1); height: clamp(220px, 40svh, 560px); overflow: hidden; background: var(--line); }
+.a-band picture, .a-band img { display: block; width: 100%; height: 100%; }
+.a-band img { object-fit: cover; object-position: 50% 22%; }   /* the faces sit high in the photo: the crop keeps them */
+@media (max-width: 1023px) {
+  .a-hero { padding-bottom: 0; }
+  .a-top { grid-template-columns: minmax(0, 1fr); align-content: center; row-gap: clamp(16px, 3svh, 32px); }   /* the year's glyph box runs past its tight line: room above the kicker */
+  .a-word { order: -1; justify-self: start; font-size: min(28vw, 16svh); }
+  .a-band { height: clamp(190px, 34svh, 380px); }
+}
+
+/* ---------- the story: C6, a spine. The string hangs from a balloon and runs between the chapters ---------- */
+.story { --ch-gap: clamp(96px, 10vw, 240px); position: relative; display: grid; gap: clamp(96px, 12vw, 256px); padding: calc(var(--sec) + 72px) var(--gutter) var(--sec); background: var(--surface); }
+.sp-balloon { position: absolute; top: calc(var(--sec) - 4px); left: calc(50% - 19.6px); width: 30px; height: 39px; fill: var(--ink); overflow: visible; /* qa-allow: physical, it hangs on the string, which sits on the page's physical centre */ }
+.sp-string { position: absolute; top: calc(var(--sec) + 34px); left: calc(50% - 20px); width: 40px; height: calc(100% - var(--sec) * 2 - 34px); overflow: visible; /* qa-allow: physical, the spine is the page's physical centre */ }
+.sp-path { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 1000; stroke-dashoffset: 0; }   /* 1000, not 1: GSAP rounds px values, and 0 to 1 would jump */
+.ch { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--ch-gap); align-items: center; }
+.ch-2 .ch-text { order: 2; }
+.ch-text { display: grid; justify-items: start; gap: clamp(16px, 1.6vw, 28px); }
+.ch-text h2 { max-width: 14ch; }
+.ch-text > p:not(.ch-year) { max-width: 46ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.ch-year { position: relative; justify-self: stretch; margin: 0; font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(30px, 1.6vw + .9rem, 54px) * var(--a11y-scale)); line-height: 1; letter-spacing: .02em; color: var(--muted); }
+/* the knot on the string for each chapter: hollow until the string reaches it (only when the string draws) */
+.ch-year::before { content: ""; position: absolute; top: calc(50% - 6.5px); inset-inline-end: calc(var(--ch-gap) / -2 - 6.5px); width: 13px; height: 13px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 5px var(--surface); }
+.ch-2 .ch-year::before { inset-inline-end: auto; inset-inline-start: calc(var(--ch-gap) / -2 - 6.5px); }
+.sp-anim .ch-year::before { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--ink), 0 0 0 5px var(--surface); transition: background-color .4s var(--ease); }
+.sp-anim .ch-year.is-on::before { background: var(--ink); }
+.ch-awards { list-style: none; display: flex; align-items: flex-end; gap: clamp(16px, 1.6vw, 32px); margin: 8px 0 0; padding: 0; }
+.ch-awards img { height: clamp(72px, 5.6vw, 112px); width: auto; }
+.ch-media { margin: 0; }
+.ch-logo { justify-self: center; display: grid; justify-items: center; gap: 16px; text-align: center; }
+.ch-logo img { width: clamp(140px, 11vw, 220px); height: auto; }
+.ch-logo figcaption, .ch-quote figcaption { max-width: 30ch; font-size: var(--fs-micro); line-height: 1.5; color: var(--muted); }
+.ch-photo { background: var(--paper); }
+.ch-photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.ch-quote { display: grid; justify-items: start; gap: 16px; margin: 0; }
+.ch-quote blockquote { margin: 0; }
+.ch-quote p { font-size: var(--fs-lead); line-height: 1.5; color: var(--ink); }
+@media (max-width: 767px) {
+  /* the spine moves to the start side, every chapter beside it */
+  .story { --ch-gap: 32px; gap: 88px; padding-top: calc(var(--sec) + 56px); }
+  .sp-balloon { left: auto; right: calc(var(--gutter) - 10.4px); /* qa-allow: physical, on the string */ }
+  .sp-string { left: auto; right: calc(var(--gutter) - 20px); /* qa-allow: physical, on the string */ }
+  .ch { grid-template-columns: minmax(0, 1fr); row-gap: 32px; padding-inline-start: var(--ch-gap); }
+  .ch-2 .ch-text { order: 0; }
+  .ch-year::before, .ch-2 .ch-year::before { inset-inline-end: auto; inset-inline-start: calc(var(--ch-gap) * -1 - 6.5px); }
+  .ch-logo { justify-self: start; justify-items: start; text-align: start; }
+  .ch-logo img { width: 140px; }
+  /* the link wraps here: an underline under each line, not a rule through the second one */
+  .ch .tlink { display: inline; background: none; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; line-height: 1.8; }
+}
+
+/* ---------- principles: three numbered points, no icons ---------- */
+.values { padding: var(--sec) var(--gutter); background: var(--paper); }
+.va-list { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-m); margin: 0; padding: 0; }
+.va-list li { display: grid; align-content: start; justify-items: start; gap: 14px; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
+.va-list h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(30px, 1.6vw + .9rem, 54px) * var(--a11y-scale)); line-height: 1.04; }
+.va-list p { max-width: 34ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+@media (max-width: 767px) { .va-list { grid-template-columns: minmax(0, 1fr); gap: 40px; } }
+html.a11y-contrast .sp-path { stroke: #fff; } html.a11y-contrast .sp-balloon { fill: #fff; }
+
+/* ======================================================================================================
+   The contact page (short: an opening with the two ways to talk, old customers, the showroom and the social pages).
+   Compositions: a centred opening (the copy puts the buttons in the middle) · C8 split for old customers · a quiet
+   row of two. The signature is the mark itself: the balloon hangs over the words, its string draws down to them,
+   it breathes while you read, and on the way out it floats up (the home page's string, approved there).
+   ====================================================================================================== */
+.hero.c-hero { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; align-items: center; align-content: center; justify-items: center; text-align: center; padding-bottom: clamp(24px, 4svh, 48px); /* qa-allow: sec, fitted to the viewport */ }
+.c-sign { --bw: clamp(48px, 3.4vw, 80px); display: flex; flex-direction: column; align-items: center; animation: c-bob 7s ease-in-out infinite; }
+.c-balloon { display: block; width: var(--bw); height: calc(var(--bw) * 1.31); fill: var(--ink); translate: calc(var(--bw) * -.163) 0; }   /* the knot, not the balloon, sits over the string */
+.c-string { display: block; width: 24px; height: clamp(40px, 7svh, 96px); margin-top: -2px; overflow: visible; }
+.c-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+@keyframes c-bob { 50% { translate: 0 -8px; } }
+.c-text { width: 100%; display: grid; justify-items: center; gap: clamp(16px, 2.6vh, 32px); padding-block: clamp(12px, 2vh, 32px) 0; /* qa-allow: sec, fitted to the viewport */ }
+.c-text .kick { justify-content: center; }
+.c-text h1 { max-width: none; }
+.c-text .lead { max-width: 34ch; }
+.c-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: min(100%, clamp(640px, 48vw, 1120px)); }
+.c-tile { display: grid; justify-items: center; gap: 4px; padding: clamp(20px, 2.4vh, 32px) 32px; border-radius: var(--r-control); text-decoration: none; transition: background-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease); }
+.c-tile:active { transform: scale(.98); }
+.c-tile-wa { background: var(--ink); color: var(--on-dark); }
+.c-tile-tel { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent); }
+@media (hover: hover) {
+  .c-tile-wa:hover { background: color-mix(in srgb, var(--ink) 86%, var(--forest)); }
+  .c-tile-tel:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+}
+.c-tile-label { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); line-height: 1.3; }
+.c-tile-label .ic { width: 20px; height: 20px; }
+.c-tile-wa .c-tile-label { color: var(--on-dark-muted); }
+.c-tile-tel .c-tile-label { color: var(--muted); }
+.c-tile-num { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(32px, 1.9vw + .6rem, 56px) * var(--a11y-scale)); line-height: 1.1; letter-spacing: .01em; white-space: nowrap; }
+.c-hours { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-size: var(--fs-small); color: var(--muted); }
+
+/* the opening: the balloon comes in, then its string draws down to the words */
+.open-anim .c-sign { opacity: 0; animation: c-bob 7s ease-in-out infinite, fs-o 0s 2.5s forwards; }
+.open-anim .hero.is-in .c-sign { opacity: 1; animation: c-bob 7s ease-in-out infinite; transition: opacity 1s var(--ease) .1s; }
+.open-anim .c-line { stroke-dashoffset: 1; animation: fs-draw 0s 2.5s forwards; }
+.open-anim .hero.is-in .c-line { stroke-dashoffset: 0; animation: none; transition: stroke-dashoffset 1.4s var(--ease-io) .4s; }
+@keyframes fs-o { to { opacity: 1; } }
+
+/* old customers: C8, the words beside three close-ups of what they ask for */
+.parts { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(40px, 6vw, 160px); padding: var(--sec) var(--gutter); background: var(--surface); }
+.pt-text { display: grid; justify-items: start; gap: 20px; }
+.pt-text h2 { max-width: 12ch; }
+.pt-text p:not(.kick) { max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.pt-text .btn { margin-top: 8px; }
+.pt-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: clamp(56px, 5.6vw, 136px); gap: var(--gap-s); }
+.pt-1 { grid-column: 1 / span 4; grid-row: 1 / span 4; }
+.pt-2 { grid-column: 5 / span 2; grid-row: 2 / span 3; }
+.pt-3 { grid-column: 3 / span 4; grid-row: 5 / span 2; }
+.pt-1 img { object-position: 50% 40%; }
+
+/* the showroom and the social pages: one quiet row of two, on the paper, the last thing before the footer */
+.c-more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(40px, 6vw, 160px); padding: var(--sec) var(--gutter); background: var(--paper); }
+.cm-col { display: grid; align-content: start; justify-items: start; gap: 16px; }
+.cm-col h2 { font-size: calc(clamp(34px, 2.2vw + .6rem, 72px) * var(--a11y-scale)); }
+.cm-col p:not(.kick) { font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); }
+.cm-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; }
+@media (hover: hover) { .cm-link:hover { text-decoration-thickness: 2px; } }
+.cm-social { display: flex; flex-wrap: wrap; gap: 8px 40px; margin: 0; padding: 0; list-style: none; }
+.cm-social .tlink { font-size: var(--fs-lead); }
+
+@media (max-width: 1023px) {
+  .hero.c-hero { grid-template-rows: none; align-items: center; }
+  .parts { grid-template-columns: minmax(0, 1fr); }
+  .pt-text h2 { max-width: none; }
+}
+@media (max-width: 767px) {
+  .c-sign { --bw: 44px; }
+  .c-string { height: clamp(32px, 5svh, 56px); }
+  .c-text { gap: 14px; }
+  .c-tiles { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .c-tile { padding: 16px 24px; }
+  .pt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+  .pt-1 { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 4 / 3; }
+  .pt-2, .pt-3 { grid-column: auto; grid-row: auto; aspect-ratio: 1; }
+  .c-more { grid-template-columns: minmax(0, 1fr); row-gap: 64px; }
+}
+@media (prefers-reduced-motion: reduce) { .c-sign { animation: none; } .c-tile { transition: none; } }
+html.a11y-contrast .c-balloon { fill: #fff; } html.a11y-contrast .c-line { stroke: #fff; }
