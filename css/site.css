@@ -24,6 +24,9 @@
   --paper: #f0f3f0;
   --forest: #384a3c;
   --sun: #fedc70;             /* the German site's offer tag: the one yellow, for the gift */
+  --de-black: #000000;        /* the German flag, only as the small stamp beside "German" (Kobi, 18.10) */
+  --de-red: #dd0000;
+  --de-gold: #ffce00;
   --line: #dfe4df;
   --on-dark: #ffffff;
   --on-dark-muted: rgba(255,255,255,.78);
@@ -154,6 +157,10 @@ main:focus { outline: none; }
 .hero-text { display: grid; justify-items: start; gap: clamp(16px, 2.6vh, 32px); padding-block: clamp(16px, 4vh, 64px); /* qa-allow: sec, the first screen is fitted to the viewport height (hero-fit), not to the section rhythm */ }
 .kick { display: flex; align-items: center; gap: 12px; font-size: var(--fs-micro); color: var(--muted); }
 .kick-mark { flex: none; width: 34px; height: 34px; fill: var(--ink); }
+/* the German stamp: three flat stripes, a mark the size of a word, only where the line says German */
+.de { flex: none; display: inline-block; width: 18px; height: 12px; border-radius: 1px; vertical-align: -1px; margin-inline-start: .5em;
+  background: linear-gradient(var(--de-black) 0 33.4%, var(--de-red) 33.4% 66.7%, var(--de-gold) 66.7%); }
+.kick .de { margin-inline-start: 0; }
 .kick-line { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; }
 .hero h1 { max-width: 13ch; }
 .hl { display: block; overflow: hidden; padding-block: .1em .14em; margin-block: -.1em -.14em; }   /* room for the ascenders while the line rises */
@@ -260,6 +267,20 @@ main { position: relative; display: block; }
 }
 
 /* ---------- more from the family: C9 floating layers + MV:g12. The products float on the paper at their own depth ---------- */
+/* ---------- then and now: Kobi's story at the trunk, two line drawings in the balloon's stroke ---------- */
+.tn { padding: var(--sec) var(--gutter); background: var(--surface); }
+.tn-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-m); }
+.tn-card { display: grid; align-content: start; gap: clamp(24px, 2.4vw, 48px); padding: clamp(24px, 3vw, 72px); background: var(--paper); }
+.tn-art { display: block; width: 100%; height: auto; overflow: visible; }
+.tn-art .ln { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1.02; stroke-dashoffset: 0; }
+.tn-ball { fill: var(--ink); }
+.tn-text { display: grid; justify-items: start; gap: 12px; }
+.tn-text h3 { font-family: var(--f-display); font-weight: 100; font-size: calc(clamp(30px, 1.6vw + .9rem, 54px) * var(--a11y-scale)); line-height: 1.04; }
+.tn-text p:not(.kick) { max-width: 40ch; font-size: var(--fs-body); line-height: 1.6; color: var(--muted); }
+.tn-now .kick { color: var(--ink); }
+.tn-art { max-width: 520px; margin-inline: auto; }
+@media (max-width: 767px) { .tn-grid { grid-template-columns: minmax(0, 1fr); } .tn-art .ln { stroke-width: 2; } }
+
 .family { padding: var(--sec) var(--gutter); background: var(--paper); overflow: clip; }
 .family .sec-head { margin-bottom: 0; }
 .fam-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-m); align-items: start; }
@@ -399,6 +420,8 @@ html.a11y-contrast body, html.a11y-contrast section, html.a11y-contrast .ftw, ht
 html.a11y-contrast p, html.a11y-contrast span, html.a11y-contrast h1, html.a11y-contrast h2, html.a11y-contrast h3, html.a11y-contrast .h8x, html.a11y-contrast .hlogo { color: #fff !important; }
 html.a11y-contrast a, html.a11y-contrast .tlink { color: #ffe14d !important; }
 html.a11y-contrast .btn-solid, html.a11y-contrast .btn-light { background: #ffe14d !important; color: #000 !important; }
+html.a11y-contrast .tn-card { background: #000 !important; outline: 1px solid #fff; } html.a11y-contrast .tn-art .ln { stroke: #fff; } html.a11y-contrast .tn-ball { fill: #fff; }
+html.a11y-contrast .de { outline: 1px solid #fff; }
 html.a11y-contrast .thread-path { stroke: #fff; } html.a11y-contrast .thread-balloon, html.a11y-contrast .kick-mark { fill: #fff; }
 html.a11y-gray { filter: grayscale(1); }
 html.a11y-invert { filter: invert(1) hue-rotate(180deg); }
@@ -430,6 +453,15 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { animati
 .p-word { position: absolute; z-index: 0; inset-inline-end: calc(var(--gutter) * .5); bottom: 4vh; margin: 0; font-family: var(--f-display); font-weight: 100; font-size: min(26vw, 46vh); line-height: .8; letter-spacing: -.04em; color: color-mix(in srgb, var(--ink) 7%, var(--paper)); pointer-events: none; user-select: none; }
 .open-anim .p-hero .p-word { opacity: 0; animation: fs 0s 2.5s forwards; }
 .open-anim .p-hero.is-in .p-word { opacity: 1; animation: none; transition: opacity 1.4s var(--ease) .1s; }
+/* the Flash opening: the three colours stand in one place; Light beige and Ink rise over Falcon as the page starts to move */
+.fh-c { display: none; }
+.fh-anim .fh-c { display: block; clip-path: inset(100% 0 0 0); }
+@media (min-width: 1024px) { .fh-anim .fh-c { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; } }
+.fh-names { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0; font-size: var(--fs-micro); color: var(--muted); }
+.fh-names span { transition: color .4s var(--ease); }
+.fh-names span::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-inline-end: 6px; border-radius: 50%; background: currentColor; opacity: .35; vertical-align: 2px; transition: opacity .4s var(--ease); }
+.fh-names span.is-on { color: var(--ink); }
+.fh-names span.is-on::before { opacity: 1; }
 @media (max-width: 1023px) { .p-word { inset-inline: 0; bottom: auto; top: calc(var(--hdr) + 2svh); text-align: center; font-size: 34vw; } }
 
 /* ---------- fold: C1, the words on the start side, the bassinet from above on the other ---------- */

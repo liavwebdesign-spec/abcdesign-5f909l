@@ -392,6 +392,53 @@
     });
   }
 
+  /* Flash opening: as the page starts to move, Light beige rises over Falcon and then Ink over Light beige, and the
+     colour's name lights up under the buttons. Under reduced motion it does not run: the Falcon stands alone. */
+  var fhC = document.querySelectorAll(".fh-c"), fhNames = document.querySelectorAll(".fh-names span");
+  if (fhC.length === 2 && window.gsap && window.ScrollTrigger) {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", function () {
+      document.documentElement.classList.add("fh-anim");
+      var lit = -1, light = function (p) {
+        var i = p < .25 ? 0 : p < .75 ? 1 : 2;
+        if (i === lit) return; lit = i;
+        [].forEach.call(fhNames, function (n, k) { n.classList.toggle("is-on", k === i); });
+      };
+      var tl = gsap.timeline({ scrollTrigger: { trigger: ".p-hero", start: "top top",
+        end: function () { return "+=" + innerHeight * (innerWidth < 1024 ? .3 : .4); },
+        scrub: .6, invalidateOnRefresh: true, onUpdate: function (st) { light(st.progress); } } });
+      // one edge between two colours: the new one rises from below as the old one gives way above the same line
+      var base = document.querySelector(".fh-0"), lay = [base, fhC[0], fhC[1]];
+      [0, 1].forEach(function (k) {
+        tl.fromTo(lay[k + 1], { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none" }, k)
+          .fromTo(lay[k], { clipPath: "inset(0% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 100% 0%)", ease: "none", immediateRender: false }, k);
+      });
+      return function () { document.documentElement.classList.remove("fh-anim"); lit = -1; light(0); };
+    });
+  }
+
+  /* then and now (home): the two drawings draw themselves in the balloon's line as they arrive. On a wide screen "then"
+     draws first and "now" after it, and last the balloon rises on its string from the open trunk. On a phone each card
+     draws as it comes up. Under reduced motion the function does not run: both drawings are whole (the CSS default). */
+  var tn = document.querySelector(".tn");
+  if (tn && window.gsap && window.ScrollTrigger) {
+    gsap.matchMedia().add({ wide: "(min-width: 768px)", ok: "(prefers-reduced-motion: no-preference)" }, function (ctx) {
+      if (!ctx.conditions.ok) return;
+      var arts = gsap.utils.toArray(".tn-art", tn), ball = tn.querySelector(".tn-ball");
+      gsap.set(tn.querySelectorAll(".ln"), { strokeDashoffset: 1.01 });   // inside the gap: no dot from the round cap
+      if (ball) gsap.set(ball, { autoAlpha: 0, y: 28 });
+      var draw = function (tl, a) {
+        tl.to(a.querySelectorAll(".ln"), { strokeDashoffset: 0, ease: "none", duration: 1, stagger: .12 });
+        if (ball && a.contains(ball)) tl.to(ball, { autoAlpha: 1, y: 0, ease: "power1.out", duration: .8 }, "-=.3");
+      };
+      if (ctx.conditions.wide) {
+        var tl = gsap.timeline({ scrollTrigger: { trigger: ".tn-grid", start: "top 80%", end: "bottom 65%", scrub: .6 } });
+        arts.forEach(function (a) { draw(tl, a); });
+      } else {
+        arts.forEach(function (a) { draw(gsap.timeline({ scrollTrigger: { trigger: a, start: "top 85%", end: "bottom 45%", scrub: .6 } }), a); });
+      }
+    });
+  }
+
   /* contact: on the way out the balloon floats up off the opening (the hero's exit scene) */
   var cSign = document.querySelector(".c-sign");
   if (cSign && window.gsap && window.ScrollTrigger) {
