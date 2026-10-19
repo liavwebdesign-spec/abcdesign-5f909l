@@ -337,7 +337,7 @@
     gsap.matchMedia().add({ mob: "(max-width: 767px)", ok: "(prefers-reduced-motion: no-preference)" }, function (ctx) {
       var mob = ctx.conditions.mob, ok = ctx.conditions.ok;
       if (!ok) return;                       // reduced motion: the layers stay where they were designed
-      var RANGE = mob ? 130 : 260;           // the full distance of the deepest layer. Half on a phone
+      var RANGE = mob ? 130 : 80;            // the full distance of the deepest layer. On desktop the products sit inside their plinths, so they only breathe
       gsap.utils.toArray(".family .layer").forEach(function (el) {
         var dpt = parseFloat(el.dataset.depth);
         // symmetric fromTo around the CSS position: low on entry, high on exit, exactly in place in the middle
