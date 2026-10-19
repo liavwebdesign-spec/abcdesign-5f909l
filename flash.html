@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/Leon-Thin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/Leon-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" type="image/webp" imagesrcset="images/flash-falcon-34-700.webp 700w, images/flash-falcon-34.webp 1100w" imagesizes="(max-width: 1023px) 70vw, 40vw" fetchpriority="high">
-<link rel="stylesheet" href="css/site.css?v=28">
+<link rel="stylesheet" href="css/site.css?v=29">
 <script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: no-preference)").matches)document.documentElement.classList.add("open-anim");</script>
 </head>
 <body>
@@ -80,7 +80,7 @@
 
   <!-- 02 · fold, C1 half and half: the bassinet seen from above, one piece on the frame -->
   <section class="fold" data-axis="start" aria-labelledby="fo-title">
-    <figure class="fold-media reveal"><img src="images/flash-fold.webp" srcset="images/flash-fold-800.webp 800w, images/flash-fold.webp 1600w" sizes="(max-width: 767px) 100vw, 55vw" width="1600" height="1067" alt="הפלאש בצבע Ink מהצד, עם האמבטיה מחוברת לשלדה" loading="lazy" decoding="async"></figure>
+    <figure class="fold-media reveal"><video class="vid" src="media/flash-fold.mp4" poster="media/flash-fold.webp" width="1080" height="720" muted loop playsinline preload="none" aria-label="סוגרים את הגגון, ומקפלים את הפלאש כשהאמבטיה עליה, עד שהיא עומדת מקופלת"></video><button class="vid-tg" type="button" aria-label="עצירת הסרטון" aria-pressed="false"><span aria-hidden="true"></span></button></figure>
     <div class="fold-text reveal" style="--i:1">
       <p class="kick">קיפול</p>
       <h2 id="fo-title">מקפלים. האמבטיה נשארת עליה.</h2>
@@ -106,7 +106,7 @@
       <p class="kick">בדים</p>
       <h2 id="fb-title">את ההבדל מרגישים ביד</h2>
       <!-- TODO(קובי): אם הוא מאשר, חוזרים לנוסח "נבחרים ונתפרים בתקן גרמני". עד אז הנוסח הבטוח מהקופי -->
-      <p>הבדים של <span class="lat">ABC Design</span> נבחרים בגרמניה. יש הורים שקנו אצלנו עגלה ב-2004 ועדיין מתקשרים לבקש בד חדש, כי השלדה עוד בסדר גמור.</p>
+      <p>הבדים של <span class="lat">ABC Design</span> נבחרים בגרמניה. יש הורים שקנו אצלנו עגלה ב-2004 ועדיין יוצאים איתה מהבית, כי היא נבנתה להיות סוס עבודה לשנים.</p>
     </div>
     <div class="fb-grid">
       <figure class="fb fb-1"><img class="layer" data-depth="0.08" src="images/detail-fabric.webp" srcset="images/detail-fabric-800.webp 800w, images/detail-fabric.webp 1600w" sizes="(max-width: 767px) 100vw, 45vw" width="1600" height="1067" alt="יד מרימה את כיסוי הרגליים של הפלאש, תקריב של הבד" loading="lazy" decoding="async"></figure>
@@ -147,6 +147,7 @@
       <p class="kick">סלקל</p>
       <h2 id="se-title">הסלקל? תשאירו את זה שבחרתם</h2>
       <p>הפלאש נמכרת בישראל בלי סלקל, כדי שלא תצטרכו לקנות שוב משהו שכבר יש לכם או שכבר החלטתם עליו. יש מתאמים לסלקלים של <span class="lat" dir="ltr">Cybex, Maxi-Cosi, Joie, Nuna</span> ועוד, והסלקל מתחבר ישר לשלדה.</p>
+      <p class="se-note">*יש לרכוש מתאמים לחיבור סלקל בנפרד.</p>
     </div>
     <div class="finder reveal" style="--i:1">
       <fieldset>
@@ -189,13 +190,13 @@
       <h2 id="fq-title">מה שואלים אותנו</h2>
     </div>
     <div class="fq-list reveal" style="--i:1">
-      <details><summary><span>הפלאש מגיעה עם סלקל?</span><i aria-hidden="true"></i></summary><p>לא. היא נמכרת בלי סלקל, ויש מתאמים לסלקלים של <span class="lat" dir="ltr">Cybex, Maxi-Cosi, Joie, Nuna</span> ועוד. כתבו לנו איזה סלקל יש לכם ונגיד לכם איזה מתאם צריך.</p></details>
+      <details><summary><span>הפלאש מגיעה עם סלקל?</span><i aria-hidden="true"></i></summary><p>לא. היא נמכרת בלי סלקל, ויש מתאמים לסלקלים של <span class="lat" dir="ltr">Cybex, Maxi-Cosi, Joie, Nuna</span> ועוד. את המתאם רוכשים בנפרד. כתבו לנו איזה סלקל יש לכם ונגיד לכם איזה מתאם צריך.</p></details>
       <details><summary><span>האמבטיה באמת נשארת על העגלה כשמקפלים?</span><i aria-hidden="true"></i></summary><p>כן. מקפלים את העגלה כשהאמבטיה עליה, ומכניסים לרכב כחלק אחד.</p></details>
       <!-- TODO(קובי): עד איזה גיל, לפי המפרט -->
       <details><summary><span>עד איזה גיל משתמשים באמבטיה?</span><i aria-hidden="true"></i></summary><p><span class="tbd">ממתין לנתון</span></p></details>
       <!-- TODO(קובי): איפה אפשר לראות את העגלה. אם אין מקום קבוע, נשאר הנוסח הזה -->
       <details><summary><span>אפשר לראות את העגלה לפני שקונים?</span><i aria-hidden="true"></i></summary><p>כתבו לנו בוואטסאפ, ונתאם.</p></details>
-      <details><summary><span>מה עם בדים וחלקים בעוד כמה שנים?</span><i aria-hidden="true"></i></summary><p><span class="lat">ABC Design</span> בישראל מ-2004, ואנחנו עדיין עוזרים להורים שקנו אז. כתבו לנו.</p></details>
+      <details><summary><span>העגלה תחזיק מעמד?</span><i aria-hidden="true"></i></summary><p><span class="lat">ABC Design</span> בישראל מ-2004, ויש הורים שעדיין יוצאים מהבית עם העגלה שקנו אז. היא נבנתה להיות סוס עבודה לשנים.</p></details>
     </div>
   </section>
 
@@ -222,7 +223,7 @@
   </div>
   <div class="ft8-row ft-rv" style="--i:1">
     <div><h3>המוצרים</h3><ul><li><a href="flash.html" aria-current="page">פלאש</a></li><li><a href="ping.html">פינג</a></li><li><a href="high-chair.html">כיסא אוכל</a></li></ul></div>
-    <div><h3>החברה</h3><ul><li><a href="about.html">אודות</a></li><li><a href="contact.html">צור קשר</a></li><li><a href="https://wa.me/972524312213" data-wa="היי, יש לי עגלת ABC Design ואני מחפש/ת בדים או חלקים" target="_blank" rel="noopener">בדים וחלקים לעגלה ישנה</a></li></ul></div>
+    <div><h3>החברה</h3><ul><li><a href="about.html">אודות</a></li><li><a href="contact.html">צור קשר</a></li></ul></div>
     <div><h3>דברו איתנו</h3><ul><li><a href="https://wa.me/972524312213" data-wa="היי, אשמח לשמוע על עגלת הפלאש" target="_blank" rel="noopener">וואטסאפ&nbsp;<span class="tel" dir="ltr">052-4312213</span></a></li><li><a href="https://www.facebook.com/abcdesignisrael" target="_blank" rel="noopener">פייסבוק</a></li><li><a href="https://www.instagram.com/abcdesignil" target="_blank" rel="noopener">אינסטגרם</a></li></ul></div>
   </div>
   <div class="ft-legal">
@@ -239,7 +240,7 @@
 
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
-<script src="js/site.js?v=13" defer></script>
+<script src="js/site.js?v=15" defer></script>
 <script src="js/a11y.js?v=1" defer></script>
 <script src="js/snap-icons.js?v=1" defer></script>
 </body>

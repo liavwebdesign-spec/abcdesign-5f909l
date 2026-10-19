@@ -222,9 +222,10 @@
       // the curl: in the middle of the empty margin beside the statement (the heading is kept narrow for it)
       var st = rel(stEl), mb = rel(mbt);
       var L = { x: Math.max(32, mb.x / 2), y: st.y + st.h * .5 }, r = Math.max(26, Math.min(44, mb.x * .14));
-      // the end: the top of the canopy in the first Flash panel (the sticky panel's own place in the page)
+      // the end: the top of the canopy in the first Flash panel (the sticky panel's own place in the page).
+      // Since 19.10 that panel is the folding video, where the canopy sits lower than in the cut-out photo
       var sy = rel(syncEl), md = rel(mediaEl);
-      var E = { x: md.x + md.w * .58, y: sy.y + md.h * .1 };
+      var E = { x: md.x + md.w * .55, y: sy.y + md.h * .3 };
       var d1 = L.y - S.y, d2 = E.y - L.y;
       var d = "M" + f(S.x) + "," + f(S.y) +
         // the string falls from the handle with a slow sway
@@ -270,7 +271,7 @@
 
   /* ---------- MV:g152: the images open inside the statement (copied from the vault) ---------- */
   var root = document.querySelector(".mbt");
-  if (root) {
+  if (root && root.querySelector(".mbt-slot")) {
     var slots = [].slice.call(root.querySelectorAll(".mbt-slot"));
     var pills = slots.map(function (s) { return s.querySelector(".mbt-pill"); }), imgs = slots.map(function (s) { return s.querySelector("img"); });
     var CLOSED = "inset(0% 50% 0% 50% round 999px)", OPEN = "inset(0% 0% 0% 0% round 999px)";
@@ -446,4 +447,22 @@
       gsap.to(cSign, { y: -140, ease: "none", scrollTrigger: { trigger: ".c-hero", start: "top top", end: "bottom top", scrub: .6 } });
     });
   }
+})();
+
+/* ---------- the folding videos: play while on screen, never under reduced motion, a pause button always ---------- */
+(function () {
+  var rm = matchMedia("(prefers-reduced-motion: reduce)").matches, html = document.documentElement;
+  function still() { return html.classList.contains("a11y-still"); }   // "stop animations" in the display menu stops the videos too
+  new MutationObserver(function () { if (still()) document.querySelectorAll("video.vid").forEach(function (v) { v.pause(); }); }).observe(html, { attributes: true, attributeFilter: ["class"] });
+  document.querySelectorAll("video.vid").forEach(function (v) {
+    var b = v.parentNode.querySelector(".vid-tg"), held = rm;
+    function show() { if (!b) return; b.setAttribute("aria-pressed", held ? "true" : "false"); b.setAttribute("aria-label", held ? "הפעלת הסרטון" : "עצירת הסרטון"); }
+    function play() { if (still()) return; v.preload = "auto"; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    show();
+    if (b) b.addEventListener("click", function () { held = !held; show(); if (held) v.pause(); else play(); });
+    if (!("IntersectionObserver" in window)) { if (!held) play(); return; }
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { if (!held) play(); } else v.pause(); });
+    }, { threshold: .25 }).observe(v);
+  });
 })();
