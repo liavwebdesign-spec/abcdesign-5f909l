@@ -855,3 +855,12 @@ html.a11y-contrast .c-balloon { fill: #fff; } html.a11y-contrast .c-line { strok
 .vid-tg span { width: 12px; height: 14px; border-inline: 4px solid currentColor; }   /* pause: two bars */
 .vid-tg[aria-pressed="true"] span { width: 0; height: 0; border-inline: 0; border-block: 8px solid transparent; border-inline-start: 13px solid currentColor; margin-inline-start: 4px; transform: scaleX(-1); }   /* play: a triangle pointing right in RTL */
 .seat-text p.se-note { color: var(--ink); }
+
+/* ---------- atmosphere scene (Kobi's street clip and photo, 19.10): home after then-and-now, Flash before the colours.
+   The clip is 854 wide, so the frame stops at 1280 and never stretches it across a 2560 screen ---------- */
+.scene { padding: var(--sec) var(--gutter); background: var(--paper); }
+.scene-media { max-width: 1280px; margin: 0 auto; }
+.scene-frame { position: relative; }
+.scene-media .vid, .scene-media img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 30%; background: var(--surface); }
+.scene-media figcaption { margin-top: 14px; font-size: var(--fs-small, .9rem); color: var(--muted, #555); }
+@media (max-width: 767px) { .scene { padding-inline: 0; } .scene-media figcaption { padding-inline: var(--gutter); } .scene-media img { aspect-ratio: 3 / 2; } }   /* the clip stays 16:9 on the phone: a taller crop cuts the mother out of the frame */
