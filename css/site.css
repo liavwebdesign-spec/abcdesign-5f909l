@@ -864,3 +864,8 @@ html.a11y-contrast .c-balloon { fill: #fff; } html.a11y-contrast .c-line { strok
 .scene-media .vid, .scene-media img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 30%; background: var(--surface); }
 .scene-media figcaption { margin-top: 14px; font-size: var(--fs-small, .9rem); color: var(--muted, #555); }
 @media (max-width: 767px) { .scene { padding-inline: 0; } .scene-media figcaption { padding-inline: var(--gutter); } .scene-media img { aspect-ratio: 3 / 2; } }   /* the clip stays 16:9 on the phone: a taller crop cuts the mother out of the frame */
+
+/* the city clip inside the home brand section (Kobi K17): below the caption, wider than the sentence's measure */
+.statement .mbt-media { max-width: 1280px; margin: clamp(40px, 4vw, 72px) auto 0; text-align: start; }
+.feats { background: var(--surface); }
+@media (max-width: 767px) { .statement .mbt-media { margin-inline: calc(var(--gutter) * -1); } }
